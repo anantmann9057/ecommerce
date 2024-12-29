@@ -169,6 +169,7 @@ export default function CartItems(props) {
                         window.location.reload();
                     }
                  
+                 
                 })
                 .catch(function (error) {
                   console.log(error);

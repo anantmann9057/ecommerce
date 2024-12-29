@@ -27,25 +27,25 @@ app.post("/addToCart", async (req, res) => {
   try {
     var item = req.query;
 
-    var cart = await client.query(
-      "insert into cart( id,title,description, thumbnail, category, price, rating, stock) values($1,$2,$3,$4,$5,$6,$7,$8) returning *",
-      [
-        item.id,
-        item.title,
-        item.description,
-        item.thumbnail,
-        item.category,
-        item.price,
-        item.rating,
-        item.stock,
-      ]
-    );
-     response = {
-      status: 1,
-      data: cart.rows,
-      message: "product added to card successfully!",
-    };
-    res.json(response);
+      var cart = await client.query(
+          "insert into cart( id,title,description, thumbnail, category, price, rating, stock) values($1,$2,$3,$4,$5,$6,$7,$8) returning *",
+          [
+            item.id,
+            item.title,
+            item.description,
+            item.thumbnail,
+            item.category,
+            item.price,
+            item.rating,
+            item.stock,
+          ]
+        );
+         response = {
+          status: 1,
+          data: cart.rows,
+          message: "product added to card successfully!",
+        };
+        res.json(response);
   
   } catch (e) {
     var response = {

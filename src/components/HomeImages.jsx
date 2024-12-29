@@ -161,7 +161,7 @@ export default function HomeImages(props) {
                     stock:image.stock
 
                 });
-                axios.post("http://localhost:3000/addToCart",null,{params: {
+                axios.post("http://192.168.0.146:3000/addToCart",null,{params: {
                     id:image.id,
                     title:image.title,
                     description:image.description,

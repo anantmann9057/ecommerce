@@ -1,9 +1,8 @@
 import { useEffect } from "react";
 import  {useState} from "react";
 import axios from "axios";
-import { Container } from "react-bootstrap";
 import CartItems from "../components/CartItems";
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 
 export default function Authors(){
     const [data, setData] = useState([]);
@@ -32,9 +31,7 @@ export default function Authors(){
 
     return (
         <div className="container-fluid w-100">
-          <Container>
-          <h1>My Cart - ${sum.toFixed(2)}</h1>
-          </Container>
+         <h1>My Cart - ${sum.toFixed(2)}</h1>
           <CartItems products={data}></CartItems>
         </div>
       );

@@ -24,10 +24,10 @@ export default function CartItems(props) {
   const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: "relative",
     width: "100%",
-    height: 200,
+    height: 300,
     [theme.breakpoints.down("sm")]: {
       width: "100% !important", // Overrides inline-style
-      height: 100,
+      height: 300,
     },
     "&:hover, &.Mui-focusVisible": {
       zIndex: 1,
@@ -49,7 +49,7 @@ export default function CartItems(props) {
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundSize: "cover",
+    backgroundSize: "contain",
     backgroundPosition: "center 40%",
   });
 
@@ -93,14 +93,14 @@ export default function CartItems(props) {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {props.products.map((image, index) => (
+        {props.products.length ==0 ?<div className="container-fluid h-100"><img className="container d-flex justify-content-center h-50" src="https://www.ipack.com/media/icons/empty-cart-ipack.png"></img></div>: props.products.map((image, index) => (
           <Grid key={index} size={{ xs: 4, sm: 4, md: 4 }} className="rounded">
             <div>
               <Box
                 sx={{
                   display: "flex",
                   flexWrap: "wrap",
-                  minWidth: 300,
+                  minWidth: 200,
                   width: "100%",
                 }}
               >
@@ -130,7 +130,7 @@ export default function CartItems(props) {
                       >
                         {image.title}
                         <ImageMarked className="MuiImageMarked-root" />
-                      </Typography>
+                      </Typography>/
                     </Image>
                   </ImageButton>
                 }

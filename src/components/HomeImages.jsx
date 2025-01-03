@@ -11,23 +11,30 @@ import Col from "react-bootstrap/Col";
 import Rating from "@mui/material/Rating";
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
 import { ToastContainer, toast } from 'react-toastify';
 
 
+import { useNavigate } from "react-router-dom";
+
+
 
 export default function HomeImages(props) {
+  const navigate = useNavigate();
 
+  function navigateToDetails() {
+    navigate("/itemDetail");
+  }
     const [item,setItem]=useState({});
   const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: "relative",
     width: "100%",
-    height: 200,
+    height: 300,
     [theme.breakpoints.down("sm")]: {
       width: "100% !important", // Overrides inline-style
-      height: 100,
+      height: 300,
     },
     "&:hover, &.Mui-focusVisible": {
       zIndex: 1,
@@ -49,7 +56,7 @@ export default function HomeImages(props) {
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundSize: "cover",
+    backgroundSize: "contain",
     backgroundPosition: "center 40%",
   });
 
@@ -87,14 +94,14 @@ export default function HomeImages(props) {
   }));
 
   return (
-    <div className="container-fluid border-rounded">
+    <div className="container-fluid ">
       <Grid
         container
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {props.products.map((image, index) => (
-          <Grid key={index} size={{ xs: 4, sm: 4, md: 4 }} className="rounded">
+          <Grid key={index} size={{ xs: 4, sm: 4, md: 4 }} className="border border-rounded p-3 ">
             <div>
               <Box
                 sx={{
@@ -111,9 +118,10 @@ export default function HomeImages(props) {
                     style={{
                       width: image.width,
                     }}
+                    onClick={navigate}
                   >
                     <ImageSrc
-                      style={{ backgroundImage: `url(${image.thumbnail})` }}
+                      style={{ backgroundImage: `url(${image.thumbnail})`, objectFit:"contain"}}
                     />
                     <ImageBackdrop className="MuiImageBackdrop-root" />
                     <Image>
@@ -137,17 +145,13 @@ export default function HomeImages(props) {
               </Box>
 
               <h6>{image.title}</h6>
-              <Container>
-                <Row>
-                  <Col>
-                    <h6>${image.price}</h6>
-                  </Col>
-                  <Col>
+              <p>{image.description}</p>
+
+              <Container className="d-flex justify-content-between p-0 m-0">
+              <h6>${image.price}</h6>
                     <Box sx={{ "& > legend": { mt: 2 } }}>
                       <Rating name="read-only" value={image.rating} readOnly />
                     </Box>
-                  </Col>
-                </Row>
               </Container>
               <Button variant="dark" onClick={()=>{
                 setItem({

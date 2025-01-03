@@ -5,6 +5,8 @@ import Home from './pages/Home';
 import Header from './components/Header';
 import Cart from "./pages/Cart"
   import { ToastContainer, toast } from 'react-toastify';
+import ItemDetails from './pages/ItemDetailsPage';
+import Authentication from './pages/Authentication';
 
 function App() {
 
@@ -14,6 +16,8 @@ function App() {
        <Routes>
          <Route path='/' element={<Home/>} />
          <Route path='/cart' element={<Cart/>} />
+        <Route path='/itemDetail' element={<ItemDetails></ItemDetails>}></Route>
+        <Route path='/auth' element={<Authentication></Authentication>}></Route>
 
        </Routes>
        <ToastContainer />

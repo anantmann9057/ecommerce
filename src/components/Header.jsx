@@ -5,8 +5,8 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 import {  Link } from 'react-router-dom';
 
 export default function Header(){
-    return (<div className=' w-100 ms-5'>
- <Navbar expand="lg" className="bg-body-tertiary">
+    return (<div className='w-100 '>
+ <Navbar expand="lg" className="bg-body-tertiary container-fluid ps-5">
  <Navbar.Brand as={Link} to="/">Welcome</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">

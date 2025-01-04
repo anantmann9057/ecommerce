@@ -9,15 +9,16 @@ export default function Authors(){
     const [sum,setSum] =useState(0);
     useEffect(() => {
         axios
-          .get('http://localhost:3000/cartItems')
+          .get('http://localhost:3000/getCartItems')
           .then(function (response) {
+            console.log(response.data.data);
             let total = 0;
-            response.data.forEach(x => {
+            response.data.data.forEach(x => {
               total += x.price;
 
           });
             setSum(total);
-            setData(response.data);
+            setData(response.data.data);
           })
           .catch(function (error) {
             console.log(error);

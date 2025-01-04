@@ -1,4 +1,6 @@
 export default function Authentication(){
 
-    return (<div></div>);
+    return (<div>
+        
+    </div>);
 }

@@ -1,18 +1,44 @@
+import { z } from "zod";
+import VerificationTokenModel from "../models/VerificationToken.js";
+import UserModel from "../models/Users.js";
+const schema = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Invalid email address" }),
+});
 
-export const  generateAuthLink = (req,res)=>{
+export const generateAuthLink = async (req, res, next) => {
+  const result = schema.safeParse(req.body);
+  if (!result.success) {
+    res.status(403).json({ error: result.error.flatten().fieldErrors });
+  } else {
     console.log(req.body.email);
+    try{
+        let user = await UserModel.findOne({ email: req.body.email });
 
-    const emailValidation = new RegExp("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
+        if (!user) {
+           user =  await UserModel.create({
+                email:req.body.email,
+                userId:req.body.email
+              });
+          res.json(user);
+         
+        }
 
-    if(emailValidation.test(req.body.email)){
-        res.json({
-            "data":"hello"
+        const userId = user._id.toString();
+        await VerificationTokenModel.findOneAndDelete({
+            userId:userId
         });
-    }
-    else{
-        res.json({
-            "data":"fuckoff"
-        });
-    }
-   
+        await VerificationTokenModel.create({
+            userId: userId,
+            token:req.body.email,
+          });
+          res.status(200).json(result);
+        }
+        catch(e){
+            res.json(e.message);
+        }
+      
+        next();
+  }
 };

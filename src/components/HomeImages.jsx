@@ -3,18 +3,15 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 
 import { experimentalStyled as styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+
 import Rating from "@mui/material/Rating";
 import Button from 'react-bootstrap/Button';
 import axios from "axios";
-import { Navigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
-import { ToastContainer, toast } from 'react-toastify';
+import {  toast } from 'react-toastify';
 
 
 import { useNavigate } from "react-router-dom";
@@ -24,10 +21,8 @@ import { useNavigate } from "react-router-dom";
 export default function HomeImages(props) {
   const navigate = useNavigate();
 
-  function navigateToDetails() {
-    navigate("/itemDetail");
-  }
-    const [item,setItem]=useState({});
+ 
+  const [item,setItem]=useState({});
   const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: "relative",
     width: "100%",
@@ -143,7 +138,9 @@ export default function HomeImages(props) {
                   </ImageButton>
                 }
               </Box>
-
+              <h4 style={{
+                textDecoration:"underline"
+              }} className="mt-2">{image.brand}</h4>
               <h6>{image.title}</h6>
               <p>{image.description}</p>
 
@@ -165,7 +162,7 @@ export default function HomeImages(props) {
                     stock:image.stock
 
                 });
-                axios.post("http://192.168.0.146:3000/addToCart",null,{params: {
+                axios.post("http://localhost:3000/insertIntoCart",null,{params: {
                     id:image.id,
                     title:image.title,
                     description:image.description,
@@ -177,7 +174,6 @@ export default function HomeImages(props) {
 
                 }})
                 .then(function (response) {
-
                     if(response.data.status==1){
                         toast(`${response.data.message}`);
                     }else{

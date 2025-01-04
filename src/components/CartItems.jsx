@@ -3,24 +3,19 @@ import ButtonBase from "@mui/material/ButtonBase";
 import Typography from "@mui/material/Typography";
 
 import { experimentalStyled as styled } from "@mui/material/styles";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid2";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Rating from "@mui/material/Rating";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 import axios from "axios";
-import { useParams } from "react-router-dom";
 import { useState } from "react";
 
-import { ToastContainer, toast } from 'react-toastify';
-
-
+import {  toast } from "react-toastify";
 
 export default function CartItems(props) {
-
-    const [item,setItem]=useState({});
+  const [item, setItem] = useState({});
   const ImageButton = styled(ButtonBase)(({ theme }) => ({
     position: "relative",
     width: "100%",
@@ -93,93 +88,114 @@ export default function CartItems(props) {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {props.products.length ==0 ?<div className="container-fluid h-100"><img className="container d-flex justify-content-center h-50" src="https://www.ipack.com/media/icons/empty-cart-ipack.png"></img></div>: props.products.map((image, index) => (
-          <Grid key={index} size={{ xs: 4, sm: 4, md: 4 }} className="rounded">
-            <div>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  minWidth: 200,
-                  width: "100%",
-                }}
-              >
-                {
-                  <ImageButton
-                    focusRipple
-                    key={image.id}
-                    style={{
-                      width: image.width,
-                    }}
-                  >
-                    <ImageSrc
-                      style={{ backgroundImage: `url(${image.thumbnail})` }}
-                    />
-                    <ImageBackdrop className="MuiImageBackdrop-root" />
-                    <Image>
-                      <Typography
-                        component="span"
-                        variant="subtitle1"
-                        color="inherit"
-                        sx={(theme) => ({
-                          position: "relative",
-                          p: 4,
-                          pt: 2,
-                          pb: `calc(${theme.spacing(1)} + 6px)`,
-                        })}
-                      >
-                        {image.title}
-                        <ImageMarked className="MuiImageMarked-root" />
-                      </Typography>/
-                    </Image>
-                  </ImageButton>
-                }
-              </Box>
+        {props.products.length == 0 ? (
+          <div className="container-fluid h-100">
+            <img
+              className="container d-flex justify-content-center h-50"
+              src="https://www.ipack.com/media/icons/empty-cart-ipack.png"
+            ></img>
+          </div>
+        ) : (
+          props.products.map((image, index) => (
+            <Grid
+              key={index}
+              size={{ xs: 4, sm: 4, md: 4 }}
+              className="rounded"
+            >
+              <div>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    minWidth: 200,
+                    width: "100%",
+                  }}
+                >
+                  {
+                    <ImageButton
+                      focusRipple
+                      key={image.id}
+                      style={{
+                        width: image.width,
+                      }}
+                    >
+                      <ImageSrc
+                        style={{ backgroundImage: `url(${image.thumbnail})` }}
+                      />
+                      <ImageBackdrop className="MuiImageBackdrop-root" />
+                      <Image>
+                        <Typography
+                          component="span"
+                          variant="subtitle1"
+                          color="inherit"
+                          sx={(theme) => ({
+                            position: "relative",
+                            p: 4,
+                            pt: 2,
+                            pb: `calc(${theme.spacing(1)} + 6px)`,
+                          })}
+                        >
+                          {image.title}
+                          <ImageMarked className="MuiImageMarked-root" />
+                        </Typography>
+                        /
+                      </Image>
+                    </ImageButton>
+                  }
+                </Box>
 
-              <h6>{image.title}</h6>
-              <Container>
-                <Row>
-                  <Col>
-                    <h6>${image.price}</h6>
-                  </Col>
-                  <Col>
-                    <Box sx={{ "& > legend": { mt: 2 } }}>
-                      <Rating name="read-only" value={image.rating} readOnly />
-                    </Box>
-                  </Col>
-                </Row>
-              </Container>
-              <Button variant="dark" onClick={()=>{
-                setItem({
-                    id:image.id,
-                    title:image.title,
-                    description:image.description,
-                    thumbnail:image.thumbnail,
-                    category:image.category,
-                    price:image.price,
-                    rating:image.rating,
-                    stock:image.stock
-
-                });
-                axios
-                .post('http://localhost:3000/deleteFromCart',null,{params:{id:image.id}})
-                .then(function (response) {
-                    if(response.data.status==1){
-                        toast(`${response.data.message}`);
-                        window.location.reload();
-                    }
-                 
-                 
-                })
-                .catch(function (error) {
-                  console.log(error);
-                })
-                .finally(function () {});
-              }}>Remove from cart</Button>
-
-            </div>
-          </Grid>
-        ))}
+                <h6>{image.title}</h6>
+                <Container>
+                  <Row>
+                    <Col>
+                      <h6>${image.price}</h6>
+                    </Col>
+                    <Col>
+                      <Box sx={{ "& > legend": { mt: 2 } }}>
+                        <Rating
+                          name="read-only"
+                          value={image.rating}
+                          readOnly
+                        />
+                      </Box>
+                    </Col>
+                  </Row>
+                </Container>
+                <Button
+                  variant="dark"
+                  onClick={() => {
+                    setItem({
+                      id: image.id,
+                      title: image.title,
+                      description: image.description,
+                      thumbnail: image.thumbnail,
+                      category: image.category,
+                      price: image.price,
+                      rating: image.rating,
+                      stock: image.stock,
+                    });
+                    axios
+                      .post("http://localhost:3000/deleteFromCart", null, {
+                        params: { id: image.id },
+                      })
+                      .then(function (response) {
+                        if (response.data.status == 1) {
+                          toast(`${response.data.message}`);
+                          window.location.reload();
+                        }
+                      })
+                      .catch(function (error) {
+                        console.log(error);
+                      })
+                      .finally(function () {});
+                  }}
+                >
+                  Remove from cart
+                </Button>
+              </div>
+            </Grid>
+          ))
+        )}
       </Grid>
     </div>
   );

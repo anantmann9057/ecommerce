@@ -5,5 +5,6 @@ import { verifyAuthToken } from "../controller/Auth.js";
 const authRouter = Router();
 
 authRouter.post("/generate-link",generateAuthLink);
-authRouter.post('/verify',verifyAuthToken);
+authRouter.get('/verify',verifyAuthToken);
+
 export default authRouter;

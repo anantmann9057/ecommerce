@@ -15,3 +15,12 @@ export const sendSuccessResponse = ({ res, message, status, data }) => {
 export const compareToken = ({ storedToken, currentToken }) => {
   return bcrypt.compareSync(storedToken, currentToken);
 };
+
+export const formatUserProfile = (userModel)=>{
+  return{
+    id:userModel._id,
+    name:userModel.name,
+    email:userModel.email,
+    role:userModel.role
+  }
+}

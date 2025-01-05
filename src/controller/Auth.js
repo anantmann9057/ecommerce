@@ -2,13 +2,10 @@ import { z } from "zod";
 import VerificationTokenModel from "../models/VerificationToken.js";
 import UserModel from "../models/Users.js";
 import mail from "../utils/mail.js";
-import jwt from 'jsonwebtoken';
-import {
-  sendErrorMessage,
-  sendSuccessResponse,
-} from "../utils/helper.js";
+import jwt from "jsonwebtoken";
+import { formatUserProfile, sendErrorMessage, sendSuccessResponse } from "../utils/helper.js";
 // const nodeMailerKey = "32fe737fcd25d73472e94a57383f1d69";
-const jwtKey ='41525779dcec5ff8bbaede4cf3843b03587d';
+const jwtKey = "41525779dcec5ff8bbaede4cf3843b03587d";
 const schema = z.object({
   email: z
     .string({ required_error: "Email is required" })
@@ -41,7 +38,7 @@ export const generateAuthLink = async (req, res, next) => {
       token: req.body.email,
     });
     console.log(verification.token);
-    const link = `http://localhost:5173/verify?token=${verification.token}&userId=${verification.userId}`;
+    const link = `http://localhost:3000/auth/verify?token=${verification.token}&userId=${verification.userId}`;
 
     await mail.sendVerificationMail({
       from: "verification@ecommerce.com", // sender address
@@ -61,23 +58,27 @@ export const generateAuthLink = async (req, res, next) => {
 };
 export const verifyAuthToken = async (req, res, next) => {
   let token = req.query.token;
-  var user = await UserModel.findById(req.body.userId);
+  console.log(token);
   var tokenEntery = await VerificationTokenModel.findOne({ token: token });
+  var userModel = await UserModel.findById(tokenEntery.userId)
   if (tokenEntery) {
-    await VerificationTokenModel.findByIdAndDelete({ token: token });
+    const payload = { userId: tokenEntery.userId.toString() };
 
-    const payload = {userId:user._id};
-
-    jwt.sign(payload,jwtKey,{
-      expiresIn:'15d'
-    });
-   return  sendSuccessResponse({
-      res: res,
-      message: "you are verified successfully!",
-      status: 200,
-      data: {},
+    var authToken = jwt.sign(payload, jwtKey, {
+      expiresIn: "15d",
     });
 
+    await VerificationTokenModel.findOneAndDelete({ token: token });
+    res.cookie("authToken", authToken, {
+      http: true,
+      secure: false,
+      sameSite: "strict",
+      expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+    });
+   //res.json(userModel);
+    res.redirect(`http://localhost:5173/?profile=${JSON.stringify(formatUserProfile(userModel))}`);
+    
+   
   } else {
     return sendErrorMessage(
       res,
@@ -85,5 +86,4 @@ export const verifyAuthToken = async (req, res, next) => {
       403
     );
   }
-  
 };

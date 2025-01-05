@@ -11,7 +11,7 @@ const transport = nodemailer.createTransport({
 });
 
 const mail = {
-   async  sendVerificationMail({from,to,subject,text,html}){
+   async sendVerificationMail({from,to,subject,text,html}){
 
         const info = await transport.sendMail({
             from: from, // sender address

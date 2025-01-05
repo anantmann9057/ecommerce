@@ -2,8 +2,13 @@ import { z } from "zod";
 import VerificationTokenModel from "../models/VerificationToken.js";
 import UserModel from "../models/Users.js";
 import mail from "../utils/mail.js";
+import jwt from 'jsonwebtoken';
+import {
+  sendErrorMessage,
+  sendSuccessResponse,
+} from "../utils/helper.js";
 // const nodeMailerKey = "32fe737fcd25d73472e94a57383f1d69";
-
+const jwtKey ='41525779dcec5ff8bbaede4cf3843b03587d';
 const schema = z.object({
   email: z
     .string({ required_error: "Email is required" })
@@ -56,19 +61,29 @@ export const generateAuthLink = async (req, res, next) => {
 };
 export const verifyAuthToken = async (req, res, next) => {
   let token = req.query.token;
+  var user = await UserModel.findById(req.body.userId);
   var tokenEntery = await VerificationTokenModel.findOne({ token: token });
   if (tokenEntery) {
-    res.json({
-      data: {},
-      status: 1,
+    await VerificationTokenModel.findByIdAndDelete({ token: token });
+
+    const payload = {userId:user._id};
+
+    jwt.sign(payload,jwtKey,{
+      expiresIn:'15d'
+    });
+   return  sendSuccessResponse({
+      res: res,
       message: "you are verified successfully!",
-    });
-  } else {
-    res.json({
+      status: 200,
       data: {},
-      status: 0,
-      message: `invalid token! ${req.query.token}`,
     });
+
+  } else {
+    return sendErrorMessage(
+      res,
+      `invalid token! ${req.query.token} ${req.query.userId}`,
+      403
+    );
   }
-  next();
+  
 };

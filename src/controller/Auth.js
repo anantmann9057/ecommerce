@@ -17,6 +17,7 @@ export const generateAuthLink = async (req, res, next) => {
   } else {
     console.log(req.body.email);
     let user = await UserModel.findOne({ email: req.body.email });
+    1;
 
     if (!user) {
       user = await UserModel.create({
@@ -35,7 +36,7 @@ export const generateAuthLink = async (req, res, next) => {
       token: req.body.email,
     });
     console.log(verification.token);
-    const link = `http://localhost:5173/verify?token=${verification.token}`;
+    const link = `http://localhost:5173/verify?token=${verification.token}&userId=${verification.userId}`;
 
     await mail.sendVerificationMail({
       from: "verification@ecommerce.com", // sender address
@@ -51,6 +52,23 @@ export const generateAuthLink = async (req, res, next) => {
       message:
         "A mail has been sent to your address please verify to continue!",
     });
-
   }
+};
+export const verifyAuthToken = async (req, res, next) => {
+  let token = req.query.token;
+  var tokenEntery = await VerificationTokenModel.findOne({ token: token });
+  if (tokenEntery) {
+    res.json({
+      data: {},
+      status: 1,
+      message: "you are verified successfully!",
+    });
+  } else {
+    res.json({
+      data: {},
+      status: 0,
+      message: `invalid token! ${req.query.token}`,
+    });
+  }
+  next();
 };

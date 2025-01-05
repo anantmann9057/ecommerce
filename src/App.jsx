@@ -7,6 +7,7 @@ import Cart from "./pages/Cart"
   import { ToastContainer, toast } from 'react-toastify';
 import ItemDetails from './pages/ItemDetailsPage';
 import Authentication from './pages/Authentication';
+import Verify from './pages/Verify';
 
 function App() {
 
@@ -18,6 +19,7 @@ function App() {
          <Route path='/cart' element={<Cart/>} />
         <Route path='/itemDetail' element={<ItemDetails></ItemDetails>}></Route>
         <Route path='/auth' element={<Authentication></Authentication>}></Route>
+        <Route path='/verify' element={<Verify></Verify>}></Route>
 
        </Routes>
        <ToastContainer />

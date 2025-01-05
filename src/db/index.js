@@ -6,7 +6,7 @@ if(!uri) throw new Error("No Database Found!");
 
 export const dbConnect =()=>{
     mongoose.connect(uri).then(()=>{
-        console.log('server started!')
+        console.log('db connected!')
     }).catch((e)=>{
         console.log(e);
     });

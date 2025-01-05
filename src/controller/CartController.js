@@ -1,6 +1,5 @@
 import pg from "pg";
 import cartModel from "../models/Cart.js";
-import mongoose from "mongoose";
 const client = new pg.Client({
   user: "postgres",
   password: "123456",
@@ -42,23 +41,7 @@ export const addToCart = async (req, res) => {
     res.json(response);
   }
 };
-// export const deleteFromCart = async (req, res) => {
-//   console.log(req.query.id);
-//   try {
-//     var cart = await client.query("delete from cart where id = $1", [
-//       req.query.id,
-//     ]);
-//     var response = {
-//       status: 1,
-//       data: cart.rows,
-//       message: "product removed successfully!",
-//     };
-//     res.json(response);
-//   } catch (e) {
-//     res.sendStatus(500);
-//     res.json(e);
-//   }
-// };
+
 export const cartItems = async (req, res) => {
   try {
     var response = await client.query("select * from cart").then();
@@ -80,12 +63,13 @@ export const getCartItems = async (req, res) => {
     });
   }
   res.json({
-    data:cart,
-    status:1,message:"cart fetched successfully"
+    data: cart,
+    status: 1,
+    message: "cart fetched successfully",
   });
 };
 export const insertIntoCart = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   let cart = await cartModel.findOne({ id: req.query.id });
   if (!cart) {
     cart = await cartModel.create({
@@ -99,21 +83,25 @@ export const insertIntoCart = async (req, res) => {
       stock: req.query.stock,
     });
   }
-  res.json(cart);
+  res.json({
+    data: {},
+    status: 1,
+    message: "item added successfully!",
+  });
 };
 
-export const deleteFromCart = async(req,res)=>{
+export const deleteFromCart = async (req, res) => {
   let cart = await cartModel.findOneAndDelete({ id: req.query.id });
-  if(!cart){
+  if (!cart) {
     res.json({
-      data:{},
-      status:0,
-      message:"unable to delete item!"
-    })
+      data: {},
+      status: 0,
+      message: "unable to delete item!",
+    });
   }
   res.json({
-    data:{},
-    status:1,
-    message:"item deleted successfully!"
-  })
-}
+    data: {},
+    status: 1,
+    message: "item deleted successfully!",
+  });
+};

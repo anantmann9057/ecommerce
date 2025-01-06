@@ -8,10 +8,12 @@ import authRouter from "./src/routes/Auth.js";
 import cartRouter from "./src/routes/Cart.js";
 
 import { dbConnect } from "./src/db/index.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 dbConnect();
+app.use(cookieParser())
 
 
 

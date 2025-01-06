@@ -3,7 +3,7 @@ import VerificationTokenModel from "../models/VerificationToken.js";
 import UserModel from "../models/Users.js";
 import mail from "../utils/mail.js";
 import jwt from "jsonwebtoken";
-import { formatUserProfile, sendErrorMessage, sendSuccessResponse } from "../utils/helper.js";
+import { formatUserProfile, sendErrorMessage } from "../utils/helper.js";
 // const nodeMailerKey = "32fe737fcd25d73472e94a57383f1d69";
 const jwtKey = "41525779dcec5ff8bbaede4cf3843b03587d";
 const schema = z.object({
@@ -87,3 +87,7 @@ export const verifyAuthToken = async (req, res, next) => {
     );
   }
 };
+
+export const sendProfileInfo =(req,res)=>{
+
+}

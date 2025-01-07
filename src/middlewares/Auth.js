@@ -1,5 +1,5 @@
 
-import { sendErrorMessage } from "../utils/helper.js";
+import { formatUserProfile, sendErrorMessage } from "../utils/helper.js";
 import jwt from 'jsonwebtoken';
 import UserModel from "../models/Users.js";
 export const isAuth= async (req,res,next)=>{
@@ -16,9 +16,11 @@ export const isAuth= async (req,res,next)=>{
         return sendErrorMessage({res:res,message:"Unauthorisec user not found!",staus:401})
     }
     req.user = user;
-
-    res.json(req.user);
     console.log(payload);
+
+    res.json({
+        profileData:formatUserProfile(user)
+    });
     }
     catch(e){
         next(e);

@@ -23,7 +23,7 @@ export default function Home() {
   
   return (
     <div className="container-fluid w-100">
-      <h1>Products</h1>
+      <h1 className="container-fluid m-2">Products</h1>
       <HomeImages products={data}></HomeImages>
     </div>
   );

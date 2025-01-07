@@ -113,7 +113,9 @@ export default function HomeImages(props) {
                     style={{
                       width: image.width,
                     }}
-                    onClick={navigate}
+                    onClick={()=>{
+                      navigate(`/itemDetails/`,{state:{id:image.id}});
+                    }}
                   >
                     <ImageSrc
                       style={{ backgroundImage: `url(${image.thumbnail})`, objectFit:"contain"}}

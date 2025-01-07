@@ -26,7 +26,6 @@ export const generateAuthLink = async (req, res, next) => {
         email: req.body.email,
         userId: req.body.email,
       });
-      res.json(user);
     }
 
     const userId = user._id.toString();

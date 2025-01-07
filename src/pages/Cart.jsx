@@ -32,7 +32,7 @@ export default function Authors(){
 
     return (
         <div className="container-fluid w-100">
-         <h1>My Cart - ${sum.toFixed(2)}</h1>
+         <h1 className="m-2">My Cart - ${sum.toFixed(2)}</h1>
           <CartItems products={data}></CartItems>
         </div>
       );

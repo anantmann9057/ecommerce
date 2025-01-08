@@ -3,7 +3,11 @@ import VerificationTokenModel from "../models/VerificationToken.js";
 import UserModel from "../models/Users.js";
 import mail from "../utils/mail.js";
 import jwt from "jsonwebtoken";
-import { formatUserProfile, sendErrorMessage } from "../utils/helper.js";
+import {
+  formatUserProfile,
+  sendErrorMessage,
+  sendSuccessResponse,
+} from "../utils/helper.js";
 // const nodeMailerKey = "32fe737fcd25d73472e94a57383f1d69";
 const jwtKey = "41525779dcec5ff8bbaede4cf3843b03587d";
 const schema = z.object({
@@ -14,6 +18,7 @@ const schema = z.object({
 
 export const generateAuthLink = async (req, res, next) => {
   const result = schema.safeParse(req.body);
+  console.log(req.body);
   if (!result.success) {
     res.status(403).json({ error: result.error.flatten().fieldErrors });
   } else {
@@ -59,7 +64,7 @@ export const verifyAuthToken = async (req, res, next) => {
   let token = req.query.token;
   console.log(token);
   var tokenEntery = await VerificationTokenModel.findOne({ token: token });
-  var userModel = await UserModel.findById(tokenEntery.userId)
+  var userModel = await UserModel.findById(tokenEntery.userId);
   if (tokenEntery) {
     const payload = { userId: tokenEntery.userId.toString() };
 
@@ -74,10 +79,12 @@ export const verifyAuthToken = async (req, res, next) => {
       sameSite: "strict",
       expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
     });
-   //res.json(userModel);
-    res.redirect(`http://localhost:5173/?profile=${JSON.stringify(formatUserProfile(userModel))}`);
-    
-   
+    //res.json(userModel);
+    res.redirect(
+      `http://localhost:5173/?profile=${JSON.stringify(
+        formatUserProfile(userModel)
+      )}`
+    );
   } else {
     return sendErrorMessage(
       res,
@@ -86,14 +93,38 @@ export const verifyAuthToken = async (req, res, next) => {
     );
   }
 };
+export const updateProfile = async (req, res) => {
+  let userId = req.user._id;
 
-export const sendProfileInfo =(req,res)=>{
+  const update = {
+    $set: {
+      lName: req.body.lname,
+      fName: req.body.fName,
+      phone: req.body.phone,
+      address: req.body.address,
+    },
+  };
+
+  await UserModel.updateMany({ _id: userId }, update).then((value, err) => {
+    if (err) {
+      res.json(err);
+    }
+  });
+  sendSuccessResponse({
+    res: res,
+    message: "Profile Updated Successfully",
+    data: {},
+    status: 200,
+  });
+};
+
+export const sendProfileInfo = (req, res) => {
   res.json({
-    profile:req.user
-  })
-}
+    profile: req.user,
+  });
+};
 
-export const logoutUser=(req,res)=>{
+export const logoutUser = (req, res) => {
   res.clearCookie("authToken");
   res.end().send();
-}
+};

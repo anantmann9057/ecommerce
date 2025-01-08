@@ -10,7 +10,26 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-
+  fName: {
+    type: String,
+    trim: true,
+  },
+  lName: {
+    type: String,
+    trim: true,
+  },
+  address: {
+    type: String,
+    trim: true,
+  },
+  phone: {
+    type: String,
+    trim: true,
+  },
+  image: {
+    type: String,
+    trim: true,
+  },
   role: {
     type: String,
     enum: ["user", "author", "admin"],

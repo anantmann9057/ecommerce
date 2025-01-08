@@ -8,6 +8,7 @@ import ItemDetails from "./pages/ItemDetailsPage";
 import Authentication from "./pages/Authentication";
 import Verify from "./pages/Verify";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/itemDetail" element={<ItemDetails></ItemDetails>}></Route>
         <Route path="/auth" element={<Authentication></Authentication>}></Route>
         <Route path="/verify" element={<Verify></Verify>}></Route>
+        <Route path="/profile" element={<Profile></Profile>}></Route>
         <Route
           path="/itemDetails/"
           element={<ItemDetailsPage/>

@@ -9,7 +9,7 @@ export default function Header() {
   const [user, setUser] = useState({});
   useEffect(() => {
     axios
-      .get("http://localhost:3000/auth/profile")
+      .get("http://localhost:3000/auth/profile",{withCredentials:true})
       .then(function (response) {
         // handle success
         console.log(response.data);
@@ -41,7 +41,7 @@ export default function Header() {
             <NavDropdown title="Dropdown" id="basic-nav-dropdown">
               <NavDropdown.Item
                 as={Link}
-                to="/auth"
+                to=  {user.profile?"/profile":"/auth"} 
                 className="d-flex justify-content-between"
               >
                {user.profile?user.profile.email:"Login"} 
@@ -54,7 +54,21 @@ export default function Header() {
               <NavDropdown.Item href="#action/3.2">
                 Another action
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+              <NavDropdown.Item onClick={()=>{
+                 axios
+                 .post("http://localhost:3000/auth/logout", { withCredentials: true })
+                 .then(function (response) {
+                   setUser(response.data.profile);
+                   console.log(response);
+                 })
+                 .catch(function (error) {
+                   // handle error
+                   console.log(error);
+                 })
+                 .finally(function () {
+                   // always executed
+                 });
+              }}>Logout</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href="#action/3.4">
                 Separated link

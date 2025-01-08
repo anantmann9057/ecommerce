@@ -7,7 +7,6 @@ export const isAuth = async (req, res, next) => {
   if (!authToken) {
     return sendErrorMessage(res, "unauthorised", 401);
   }
-
   try {
     const payload = jwt.verify(
       authToken,

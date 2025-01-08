@@ -88,5 +88,12 @@ export const verifyAuthToken = async (req, res, next) => {
 };
 
 export const sendProfileInfo =(req,res)=>{
+  res.json({
+    profile:req.user
+  })
+}
 
+export const logoutUser=(req,res)=>{
+  res.clearCookie("authToken");
+  res.end().send();
 }

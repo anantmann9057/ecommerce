@@ -1,28 +1,31 @@
-
 import { formatUserProfile, sendErrorMessage } from "../utils/helper.js";
-import jwt from 'jsonwebtoken';
+import jwt from "jsonwebtoken";
 import UserModel from "../models/Users.js";
-export const isAuth= async (req,res,next)=>{
+export const isAuth = async (req, res, next) => {
+  const authToken = req.cookies.authToken;
 
-    const authToken = req.cookies.authToken;
-    if(!authToken){
-      return sendErrorMessage(res,'unauthorised',401);
-    }
-   
-    try{
-    const payload = jwt.verify(authToken,"41525779dcec5ff8bbaede4cf3843b03587d");
+  if (!authToken) {
+    return sendErrorMessage(res, "unauthorised", 401);
+  }
+
+  try {
+    const payload = jwt.verify(
+      authToken,
+      "41525779dcec5ff8bbaede4cf3843b03587d"
+    );
     let user = await UserModel.findById(payload.userId);
-    if(!user){
-        return sendErrorMessage({res:res,message:"Unauthorisec user not found!",staus:401})
+    if (!user) {
+      return sendErrorMessage({
+        res: res,
+        message: "Unauthorised user not found!",
+        staus: 401,
+      });
     }
     req.user = user;
     console.log(payload);
 
-    res.json({
-        profileData:formatUserProfile(user)
-    });
-    }
-    catch(e){
-        next(e);
-    }
-}
+    next();
+  } catch (e) {
+    next(e);
+  }
+};

@@ -9,6 +9,7 @@ import cartRouter from "./src/routes/Cart.js";
 
 import { dbConnect } from "./src/db/index.js";
 import cookieParser from "cookie-parser";
+import { fileParser } from "./src/middlewares/File.js";
 
 const app = express();
 app.use(cookieParser());
@@ -18,7 +19,8 @@ dbConnect();
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 app.use(express.json());
-
+app.use(errorHandler);
+app.use(cartRouter);
 app.use(
   "/auth",
   (req, res, next) => {
@@ -26,8 +28,15 @@ app.use(
   },
   authRouter
 );
-app.use(errorHandler);
-app.use(cartRouter);
+
+app.post('/test',fileParser,(req,res)=>{
+  res.json({
+    
+  });
+
+})
+
+
 
 app.get("/", (req, res) => {
   res.json("hello");

@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { data } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export default function Profile() {
@@ -24,26 +23,26 @@ export default function Profile() {
 
   return (
     <div className="container">
-      <div class="container rounded bg-white m-5 border border-secondary">
+      <div className="container rounded bg-white m-5 border border-secondary">
         <h1 className="justify-content-center m-3">My Profile</h1>
 
-        <div class="row">
-          <div class="col-md-4 border-right w-100">
-            <div class="d-flex flex-column align-items-center text-center p-3 ">
+        <div className="row">
+          <div className="col-md-4 border-right w-100">
+            <div className="d-flex flex-column align-items-center text-center p-3 ">
               <img
-                class="rounded-circle mt-5"
+                className="rounded-circle mt-5"
                 src="https://i.imgur.com/0eg0aG0.jpg"
                 width="90"
               ></img>
-              <span class="font-weight-bold">{user.fName}</span>
-              <span class="text-black-50">{user.email}</span>
+              <span className="font-weight-bold">{user.fName}</span>
+              <span className="text-black-50">{user.email}</span>
               <span>{user.address}</span>
             </div>
           </div>
-          <form 
+          <form
             onSubmit={(event) => {
               event.preventDefault();
-              
+
               axios
                 .post(
                   "http://localhost:3000/auth/updateProfile",
@@ -52,7 +51,6 @@ export default function Profile() {
                   { withCredentials: true }
                 )
                 .then(function (response) {
-
                   toast(`${response.data.message}`);
                   console.log(response);
                 })
@@ -65,18 +63,18 @@ export default function Profile() {
                 });
             }}
           >
-            <div class="col-md-8 w-100">
-              <div class="p-3 py-5">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <div class="d-flex flex-row align-items-center back">
-                    <i class="fa fa-long-arrow-left mr-1 mb-1"></i>
+            <div className="col-md-8 w-100">
+              <div className="p-3 py-5">
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div className="d-flex flex-row align-items-center back">
+                    <i className="fa fa-long-arrow-left mr-1 mb-1"></i>
                   </div>
                 </div>
-                <div class="row mt-2">
-                  <div class="col-md-6">
+                <div className="row mt-2">
+                  <div className="col-md-6">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="first name"
                       name="fName"
                       onChange={(value) => {
@@ -85,10 +83,10 @@ export default function Profile() {
                       value={user.fName}
                     />
                   </div>
-                  <div class="col-md-6 ">
+                  <div className="col-md-6 ">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       name="lName"
                       value={user.lName}
                       onChange={(value) => {
@@ -98,11 +96,11 @@ export default function Profile() {
                     />
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-md-6">
+                <div className="row mt-3">
+                  <div className="col-md-6">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       name="email"
                       placeholder="Email"
                       onChange={(value) => {
@@ -111,10 +109,10 @@ export default function Profile() {
                       value={user.email}
                     />
                   </div>
-                  <div class="col-md-6">
+                  <div className="col-md-6">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       name="phone"
                       value={user.phone}
                       onChange={(value) => {
@@ -124,11 +122,11 @@ export default function Profile() {
                     />
                   </div>
                 </div>
-                <div class="row mt-3">
-                  <div class="col-md-6">
+                <div className="row mt-3">
+                  <div className="col-md-6">
                     <input
                       type="text"
-                      class="form-control"
+                      className="form-control"
                       placeholder="address"
                       name="address"
                       onChange={(value) => {
@@ -139,8 +137,11 @@ export default function Profile() {
                   </div>
                 </div>
 
-                <div class="mt-5 text-right">
-                  <button class="btn btn-primary profile-button" type="submit">
+                <div className="mt-5 text-right">
+                  <button
+                    className="btn btn-primary profile-button"
+                    type="submit"
+                  >
                     Save Profile
                   </button>
                 </div>

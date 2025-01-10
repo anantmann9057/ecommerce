@@ -11,9 +11,9 @@ import { dbConnect } from "./src/db/index.js";
 import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(cookieParser());
 
 dbConnect();
-app.use(cookieParser());
 
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 

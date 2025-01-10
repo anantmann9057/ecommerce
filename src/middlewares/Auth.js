@@ -3,7 +3,6 @@ import jwt from "jsonwebtoken";
 import UserModel from "../models/Users.js";
 export const isAuth = async (req, res, next) => {
   const authToken = req.cookies.authToken;
-  console.log(authToken);
   if (!authToken) {
     return sendErrorMessage(res, "unauthorised", 401);
   }

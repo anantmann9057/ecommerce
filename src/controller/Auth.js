@@ -9,6 +9,9 @@ import {
   sendSuccessResponse,
 } from "../utils/helper.js";
 // const nodeMailerKey = "32fe737fcd25d73472e94a57383f1d69";
+
+import { OAuth2Client } from "google-auth-library";
+
 const jwtKey = "41525779dcec5ff8bbaede4cf3843b03587d";
 const schema = z.object({
   email: z
@@ -60,6 +63,7 @@ export const generateAuthLink = async (req, res, next) => {
     });
   }
 };
+
 export const verifyAuthToken = async (req, res, next) => {
   let token = req.query.token;
   console.log(token);
@@ -74,9 +78,9 @@ export const verifyAuthToken = async (req, res, next) => {
 
     await VerificationTokenModel.findOneAndDelete({ token: token });
     res.cookie("authToken", authToken, {
-      http: true,
-      secure: false,
-      sameSite: "strict",
+      httpOnly: false,
+      secure: true,
+      sameSite: "none",
       expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
     });
     //res.json(userModel);
@@ -93,6 +97,65 @@ export const verifyAuthToken = async (req, res, next) => {
     );
   }
 };
+
+export const googleAuth = async (req, res, next) => {
+  var loginTicket = await getDecodedOAuthJwtGoogle(req.body.credential);
+  if (!loginTicket) {
+    sendErrorMessage(res, "login failed!", 401);
+  }
+
+  var user = await UserModel.findOne({ email: loginTicket.payload.email });
+
+  if (!user) {
+    await UserModel.create(loginTicket.payload);
+  }
+  const userId = user._id.toString();
+ 
+  await VerificationTokenModel.findOneAndDelete({
+    userId: userId,
+  });
+  
+  
+  var verification = await VerificationTokenModel.create({
+    userId: userId,
+    token: req.body.email,
+  });
+
+  await UserModel.updateMany(
+    { email: loginTicket.payload.email },
+    loginTicket.payload
+  ).then((value, err) => {
+    if (err) {
+      res.json(err);
+    }
+  });
+  sendSuccessResponse({
+    res: res,
+    message: "login successfully",
+    status: 200,
+    data: {
+      data: loginTicket.payload,
+    },
+  });
+};
+export const getDecodedOAuthJwtGoogle = async (token) => {
+  const CLIENT_ID_GOOGLE =
+    "545304152580-mnqc201bamvbeavbgg06s8g0ipo8hdaj.apps.googleusercontent.com";
+
+  try {
+    const client = new OAuth2Client(CLIENT_ID_GOOGLE);
+
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: CLIENT_ID_GOOGLE,
+    });
+
+    return ticket;
+  } catch (error) {
+    return { status: 500, data: error };
+  }
+};
+
 export const updateProfile = async (req, res) => {
   let userId = req.user._id;
   const update = {
@@ -127,5 +190,5 @@ export const sendProfileInfo = (req, res) => {
 export const logoutUser = (req, res) => {
   res.clearCookie("authToken").send();
   res.end();
-  sendSuccessResponse(res,"Logout Successfully",200,{});
+  sendSuccessResponse(res, "Logout Successfully", 200, {});
 };

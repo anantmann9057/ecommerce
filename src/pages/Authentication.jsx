@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { GoogleLogin } from "@react-oauth/google";
+
 export default function Authentication() {
   const [getEmail, setEmail] = useState("");
   const [mailSent, setMailSent] = useState(false);
-
+  const [ user, setUser ] = useState([]);
+  const [ profile, setProfile ] = useState([]);
   const sendMail = (email) => {
-    debugger;
     axios
       .post("http://localhost:3000/auth/generate-link", {
         email: email,
@@ -26,6 +28,7 @@ export default function Authentication() {
         // always executed
       });
   };
+ 
 
   return (
     <div
@@ -42,7 +45,7 @@ export default function Authentication() {
           <h1>Login</h1>
         </div>
         {mailSent === false ? (
-          <Form className="container m-5 ">
+          <Form className="container">
             <Form.Group className="mb-3" controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control
@@ -63,7 +66,6 @@ export default function Authentication() {
               className="w-100"
               type="submit"
               onClick={() => {
-                debugger;
                 sendMail(getEmail);
               }}
             >
@@ -75,6 +77,32 @@ export default function Authentication() {
             A mail has been sent to your profile please check to authenticate
           </h1>
         )}
+          <h6 className="d-flex justify-content-center mt-5">Or</h6>
+        <div className="d-flex justify-content-center mt-5">
+        
+          <GoogleLogin onSuccess={(success)=>{
+            console.log(success);
+            axios
+            .post("http://localhost:3000/auth/googleAuth", {
+              credential: success.credential,
+            })
+            .then(function (response) {
+              toast(`${response.data.message}`);
+              setMailSent(true);
+              console.log(response.data);
+            })
+            .catch(function (error) {
+              // handle error
+              toast(`${error}`);
+            })
+            .finally(function () {
+              // always executed
+            });
+          }} onError={(error)=>{
+
+          }} />
+          <p>{user.credentials}</p>
+        </div>
       </div>
     </div>
   );

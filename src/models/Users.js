@@ -10,11 +10,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  fName: {
+  family_name: {
     type: String,
     trim: true,
   },
-  lName: {
+  given_name: {
     type: String,
     trim: true,
   },
@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     trim: true,
   },
-  image: {
+  picture: {
     type: String,
     trim: true,
   },

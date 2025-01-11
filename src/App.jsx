@@ -9,11 +9,13 @@ import Authentication from "./pages/Authentication";
 import Verify from "./pages/Verify";
 import ItemDetailsPage from "./pages/ItemDetailsPage";
 import Profile from "./pages/Profile.jsx";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
     <>
-      <Header></Header>
+     <GoogleOAuthProvider clientId="545304152580-mnqc201bamvbeavbgg06s8g0ipo8hdaj.apps.googleusercontent.com">
+     <Header></Header>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/cart" element={<Cart />} />
@@ -28,6 +30,7 @@ function App() {
         ></Route>
       </Routes>
       <ToastContainer />
+     </GoogleOAuthProvider>
     </>
   );
 }

@@ -26,7 +26,7 @@ export default function Header() {
       });
   }, []);
   return (
-    <div className="w-100 ">
+    <div className="w-100 m-0">
       <Navbar expand="lg" className="bg-body-tertiary container-fluid ps-5">
         <Navbar.Brand as={Link} to="/">
           Welcome

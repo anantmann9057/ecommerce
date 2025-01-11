@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import HomeImages from "../components/HomeImages";
-
+import HoneCarousel from "../components/Carousel";
 export default function Home() {
   const [data, setData] = useState([]);
 
@@ -22,7 +22,10 @@ export default function Home() {
 
   
   return (
-    <div className="container-fluid w-100">
+    <div className="container-fluid p-0">
+      <div className="container-fluid">
+      <HoneCarousel></HoneCarousel>
+      </div>
       <h1 className="container-fluid m-2">Products</h1>
       <HomeImages products={data}></HomeImages>
     </div>

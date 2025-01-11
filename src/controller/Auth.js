@@ -103,24 +103,29 @@ export const googleAuth = async (req, res, next) => {
   if (!loginTicket) {
     sendErrorMessage(res, "login failed!", 401);
   }
-
   var user = await UserModel.findOne({ email: loginTicket.payload.email });
 
   if (!user) {
-    await UserModel.create(loginTicket.payload);
+    user = await UserModel.create(loginTicket.payload);
   }
-  const userId = user._id.toString();
- 
-  await VerificationTokenModel.findOneAndDelete({
-    userId: userId,
-  });
-  
-  
-  var verification = await VerificationTokenModel.create({
-    userId: userId,
-    token: req.body.email,
-  });
+  var tokenEntery = await VerificationTokenModel.findOne({ userId: user._id });
+  if (!tokenEntery) {
+    tokenEntery = await VerificationTokenModel.create({
+      userId: user._id,
+      token: loginTicket.payload.email,
+    });
+  }
+  const payload = { userId: user._id.toString() };
 
+  var authToken = jwt.sign(payload, jwtKey, {
+    expiresIn: "15d",
+  });
+  res.cookie("authToken", authToken, {
+    httpOnly: false,
+    secure: false,
+    sameSite: "strict",
+    expires: new Date(Date.now() + 15 * 24 * 60 * 60 * 1000),
+  });
   await UserModel.updateMany(
     { email: loginTicket.payload.email },
     loginTicket.payload
@@ -129,6 +134,7 @@ export const googleAuth = async (req, res, next) => {
       res.json(err);
     }
   });
+
   sendSuccessResponse({
     res: res,
     message: "login successfully",
@@ -159,8 +165,8 @@ export const getDecodedOAuthJwtGoogle = async (token) => {
 export const updateProfile = async (req, res) => {
   let userId = req.user._id;
   const update = {
-    lName: req.body.lName,
-    fName: req.body.fName,
+    family_name: req.body.lName,
+    given_name: req.body.fName,
     phone: req.body.phone,
     address: req.body.address,
   };
@@ -188,7 +194,7 @@ export const sendProfileInfo = (req, res) => {
 };
 
 export const logoutUser = (req, res) => {
-  res.clearCookie("authToken").send();
+  res.clearCookie("authToken");
   res.end();
   sendSuccessResponse(res, "Logout Successfully", 200, {});
 };

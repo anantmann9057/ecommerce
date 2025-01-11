@@ -31,11 +31,13 @@ export default function Profile() {
             <div className="d-flex flex-column align-items-center text-center p-3 ">
               <img
                 className="rounded-circle mt-5"
-                src="https://i.imgur.com/0eg0aG0.jpg"
+                src={user.picture
+
+                }
                 width="90"
               ></img>
-              <span className="font-weight-bold">{user.fName}</span>
-              <span className="text-black-50">{user.email}</span>
+              <span className="font-weight-bold">{user.given_name}</span>
+              <span className="text-black-50">{user.family_name}</span>
               <span>{user.address}</span>
             </div>
           </div>
@@ -78,9 +80,9 @@ export default function Profile() {
                       placeholder="first name"
                       name="fName"
                       onChange={(value) => {
-                        setUser({ ...user, fName: value.target.value });
+                        setUser({ ...user, given_name: value.target.value });
                       }}
-                      value={user.fName}
+                      value={user.given_name}
                     />
                   </div>
                   <div className="col-md-6 ">
@@ -88,9 +90,9 @@ export default function Profile() {
                       type="text"
                       className="form-control"
                       name="lName"
-                      value={user.lName}
+                      value={user.family_name}
                       onChange={(value) => {
-                        setUser({ ...user, lName: value.target.value });
+                        setUser({ ...user, family_name: value.target.value });
                       }}
                       placeholder="Last Name"
                     />

@@ -22,32 +22,41 @@ export default function ItemDetailsPage() {
   }, [state.id]);
 
   return (
-    <div className="container-fluid mh-100" style={{
-      height:"100vh"
-    }}>
-      <div className="row d-flex justify-content-between " style={{
-        height:"100vh"
-      }}>
-        <div className="col-4 align-self-center">
-          <img src={data.thumbnail} style={{
-            objectFit:"fill"
-          }}></img>
-        </div>
-        <div className="col-4 align-self-center">
-          <h1>{data.title}</h1>
-          <h6>{data.description}</h6>
-          <div className="row justify-content-around ">
-            <div className="col-4">
-              <h3>${data.price}</h3>
-            </div>
-            <div className="col-4">
-              <Box sx={{ "& > legend": { mt: 2 } }}>
-                <Rating name="read-only" value={data.rating} readOnly />
-              </Box>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div className="container-fluid w-100">
+      <img 
+        src={data.thumbnail}
+        className="w-100  "
+        style={{
+          objectFit: "contain",
+          height: "50vh",
+        }}
+      ></img>
+
+      {data.images ? (
+        data.images.map((images, index) => (
+          <img
+            key={index}
+            src={images}
+            className="container w-20 m-5 border border-primary rounded"
+            style={{
+              objectFit: "contain",
+
+              height: "20vh",
+              width: "15%",
+              backgroundColor: "lavender",
+            }}
+          ></img>
+        ))
+      ) : (
+        <br></br>
+      )}
+     <div>
+     <h1>{data.title}  ${data.price} </h1> <h6> by {data.brand}</h6>
+     <Box sx={{ "& > legend": { mt: 2 } }}>
+                  <Rating name="read-only" value={data.rating} readOnly />
+                </Box>
+     </div>
+      <p>{data.description}</p>  
     </div>
   );
 }

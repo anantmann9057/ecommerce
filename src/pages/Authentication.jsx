@@ -1,15 +1,18 @@
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
 export default function Authentication() {
   const [getEmail, setEmail] = useState("");
   const [mailSent, setMailSent] = useState(false);
-  const [ user, setUser ] = useState([]);
-  const [ profile, setProfile ] = useState([]);
+  const [user, setUser] = useState([]);
+  const [profile, setProfile] = useState([]);
+  const navigate = useNavigate();
+
   const sendMail = (email) => {
     axios
       .post("http://localhost:3000/auth/generate-link", {
@@ -28,7 +31,6 @@ export default function Authentication() {
         // always executed
       });
   };
- 
 
   return (
     <div
@@ -77,30 +79,36 @@ export default function Authentication() {
             A mail has been sent to your profile please check to authenticate
           </h1>
         )}
-          <h6 className="d-flex justify-content-center mt-5">Or</h6>
+        <h6 className="d-flex justify-content-center mt-5">Or</h6>
         <div className="d-flex justify-content-center mt-5">
-        
-          <GoogleLogin onSuccess={(success)=>{
-            console.log(success);
-            axios
-            .post("http://localhost:3000/auth/googleAuth", {
-              credential: success.credential,
-            })
-            .then(function (response) {
-              toast(`${response.data.message}`);
-              setMailSent(true);
-              console.log(response.data);
-            })
-            .catch(function (error) {
-              // handle error
-              toast(`${error}`);
-            })
-            .finally(function () {
-              // always executed
-            });
-          }} onError={(error)=>{
+          <GoogleLogin
+            onSuccess={(success) => {
+              console.log(success);
+              axios
+                .post(
+                  "http://localhost:3000/auth/googleAuth",
+                  {
+                    credential: success.credential,
+                  },
+                  { withCredentials: true }
+                )
+                .then(function (response) {
+                  window.location.reload();
 
-          }} />
+                  navigate("/");
+
+                  toast(`${response.data.message}`);
+                })
+                .catch(function (error) {
+                  // handle error
+                  toast(`${error}`);
+                })
+                .finally(function () {
+                  // always executed
+                });
+            }}
+            onError={(error) => {}}
+          />
           <p>{user.credentials}</p>
         </div>
       </div>
